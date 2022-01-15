@@ -1,0 +1,57 @@
+<div contCentrado>
+  <h2> Buscar Libros </h2>
+</div>
+      <div contCentrado>
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Id</mat-label>
+          <input matInput (keydown.enter)="buscar()"  [(ngModel)]="valor" #busca>
+        </mat-form-field>
+      </div>
+     
+        <div contCentrado *ngIf="busqueda === undefined else res">
+            <mat-error>El id es incorrecto o no se encontro el libro</mat-error>
+        </div>
+        <ng-template #res>
+          <div *ngIf="mostrar === 'm'"> 
+           
+              <div contCentrado> 
+                <table border="1"  height="100px" [width]="600">
+                  <tr bgColor="#B0C4DE">
+                    <th>Id</th>
+                    <th>Titulo</th>
+                    <th>Autor</th>
+                    <th>Fecha de entrada</th>
+                    <th>Editorial</th>
+                    <th>Estatus</th>
+                    <th>Añadir</th>
+                  </tr>
+                  <tr bgColor="#696969">
+                    <td >{{ busqueda.id }}</td>
+                    <td >{{ busqueda.titulo }}</td>
+                    <td>{{ busqueda.autor }}</td>
+                    <td>{{ busqueda.fechaEntrada }}</td>
+                    <td>{{ busqueda.editorial }}</td>
+                    <td>
+                      <div *ngIf="busqueda.estatus === true else noDisponible" style="color: rgb(125, 125, 233);">Disponible</div>
+                      <ng-template #noDisponible id="color-id"><mat-error>Ocupado</mat-error></ng-template>
+                    </td>
+                    <td>
+                      <button mat-icon-button color="primary" [disabled]="!busqueda.estatus" (click)="actualizar()">
+                        <mat-icon><span class="material-icons">
+                          arrow_circle_up
+                          </span></mat-icon>
+                      </button>
+          
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <ul>
+                <!-- <button mat-stroked-button color="warn" [disabled]="!busqueda.estatus" (click)="eliminar()">Dar de baja</button> -->
+              </ul>
+            
+            </div>
+         
+        </ng-template>
+  
+

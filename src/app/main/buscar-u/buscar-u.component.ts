@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { usuarioModel } from 'src/app/shared/interface/datos.interface';
 import { DbService } from '../../shared/services/db.service';
+import { librosModel } from '../../shared/interface/datos.interface';
 
 @Component({
   selector: 'app-buscar-u',
   templateUrl: './buscar-u.component.html',
   styles: [`
   mat-expansion-panel{
-      width: 682px;
+      width: 800px;
       margin-top: 10px;
       margin-bottom: 10px;
     }
@@ -20,8 +21,15 @@ export class BuscarUComponent implements OnInit {
   actualizarDatos: string = '';
   valor: string = '';
   busqueda!: usuarioModel;
-  get leerD (){
+  libros!: any[];
+  objLibro!: librosModel;
+  arrLibros: string[] = [];
+  arrConcatenados!: string[];
+  get leerDu (){
     return this.dbS.leerDato;
+  }
+  get leerDl (){
+    return this.dbS.leerDatoL;
   }
   @ViewChild('busca') buscarU!: ElementRef<HTMLInputElement>
   formulario: FormGroup = this.fb.group({
@@ -32,7 +40,7 @@ export class BuscarUComponent implements OnInit {
   constructor(private dbS: DbService, private fb: FormBuilder,  private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    // this.dbS.db();
+    this.dbS.db();
   }
 
   mensageEliminado() {
@@ -41,45 +49,64 @@ export class BuscarUComponent implements OnInit {
     });
   }
 
-  mensageEditado(){
-    this._snackBar.open('Se actualizo el usuario!!!', 'db', {
+  mensageActualizado(){
+    this._snackBar.open('Usuario y libro actualizado!!!', 'db', {
       duration: 3000,
     });
   }
 
   buscar(){
-    const valor = this.buscarU.nativeElement.value;
+    const valor = this.buscarU.nativeElement.value.trim();
+    console.log(valor)
+    this.dbS.leerU(valor);
 
-    this.dbS.leerr(valor);
-
-    this.leerD.onsuccess = (e: Event) =>{
-      const u = this.leerD.result;
-      this.busqueda = u;
+    this.leerDu.onsuccess = (e: Event) =>{
+      const u = this.leerDu.result;
       console.log(u);
+      this.busqueda = u;
+      this.libros = u.libros;
       this.formulario.reset({
         nombre: u.nombre,
         edad: u.edad,
         telefono: u.telefono
         });
         this.actualizarDatos = u.id
-      
     }
   
     this.valor = '';
   }
 
   update(){
-    this.formulario.value.id = this.actualizarDatos;
-   this.dbS.actualizar(this.formulario.value);
-   this.formulario.reset();
-   this.actualizarDatos = '';
-   this.mensageEditado();
+   this.formulario.value.id = this.actualizarDatos;
+   const u = this.libros.concat(this.arrLibros)
+   this.formulario.value.libros = u;
+   console.log(this.formulario.value)
+   this.dbS.actualizarU(this.formulario.value);
+  this.mensageActualizado()
   }
 
-  borrar(id: number){
-    this.dbS.eliminar( id );
-    this.mensageEliminado();
-    this.formulario.reset();
-    this.actualizarDatos = '';
+  devolverLibro(id: string, indice: number){
+    console.log(id, indice)
+    this.libros.splice(indice, 1);
+    this.dbS.leerL(id);
+    this.leerDl.onsuccess = (e: Event) => {
+      const u = this.leerDl.result;
+      this.objLibro = u;
+      this.objLibro.estatus = true;
+      console.log(this.objLibro);
+      this.dbS.actualizarL(this.objLibro);
+    }
+    this.update();
+  }
+
+
+
+  recibirId(mensage: string){
+
+    if (mensage) {
+      this.arrLibros = [... this.arrLibros, mensage];
+      this.update();
+    }
+    console.log(this.arrLibros)
   }
 }

@@ -1,102 +1,47 @@
-<mat-drawer-container fullscreen>
-  <mat-toolbar color="primary">
-    <span>Indexeddb</span>
-  </mat-toolbar>
- 
-  <mat-accordion contCentrado>
-    <app-buscar-u></app-buscar-u>
-  </mat-accordion>
 
-<mat-accordion contCentrado>
-  <mat-expansion-panel >
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Nuevo usuario
-      </mat-panel-title>
-      <mat-panel-description>
-        agrega, edita y elimina
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-   
-    <div contCentrado>
-      <h1>{{ titulo }} Usuario</h1>
-      <span *ngIf="mostrarId" >
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Nuevo ID:</mat-label>
-          <input matInput disabled id="color-id" (click)="mostrarId = ''" [value]="mostrarId">
-        </mat-form-field>
-        <button mat-mini-fab color="warn" (click)="borrarNuevoId()">X</button>
-      </span>
-    </div>
-    <div contCentrado>
-      <form class="example-form" [formGroup]="formulario">
+      <div contCentrado>
+        <h1>{{ titulo }} Usuario</h1>
+        <span *ngIf="mostrarId" >
           <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombre">
-            <mat-error *ngIf="requerido('nombre')">El nombre es requerido</mat-error>
+            <mat-label>Nuevo ID:</mat-label>
+            <input matInput disabled id="color-id" (click)="mostrarId = ''" [value]="mostrarId">
           </mat-form-field>
-        
-          <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Edad</mat-label>
-              <input matInput type="number" formControlName="edad" >
-              <mat-error *ngIf="requerido('edad')">La edad es requerido</mat-error>
-            </mat-form-field>
+          <button mat-mini-fab color="warn" (click)="borrarNuevoId()">X</button>
+        </span>
+      </div>
+      <div contCentrado>
+        <form class="example-form" [formGroup]="formulario">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Telefono</mat-label>
-              <input matInput type="number" formControlName="telefono">
-              <mat-error *ngIf="requerido('telefono')">El telefono es requerido</mat-error>
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="nombre">
+              <mat-error *ngIf="requerido('nombre')">El nombre es requerido</mat-error>
             </mat-form-field>
-        </form>
+          
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Edad</mat-label>
+                <input matInput type="number" formControlName="edad" >
+                <mat-error *ngIf="requerido('edad')">La edad es requerido</mat-error>
+              </mat-form-field>
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Telefono</mat-label>
+                <input matInput type="number" formControlName="telefono">
+                <mat-error *ngIf="requerido('telefono')">El telefono es requerido</mat-error>
+              </mat-form-field>
+          </form>
+          
+          <span *ngIf="actualizarDatos" >
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>ID:</mat-label>
+              <input matInput disabled id="color-id"  [value]="actualizarDatos">
+            </mat-form-field>
+        </span>
+          <mat-divider></mat-divider>
+      </div>
+      <div contCentrado>
+        <button mat-raised-button color="primary" [disabled]="desabilitarB" (click)="agregar()">Agregar</button>
         
-        <span *ngIf="actualizarDatos" >
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>ID:</mat-label>
-            <input matInput disabled id="color-id"  [value]="actualizarDatos">
-          </mat-form-field>
-       </span>
-        <mat-divider></mat-divider>
       </div>
-    <div contCentrado>
-      <button mat-raised-button color="primary" [disabled]="desabilitarB" (click)="agregar()">Agregar</button>
-      <button mat-raised-button color="basic" [disabled]="desabilitarBA" (click)="actualizar()">Actualizar usuario</button>
-      
-    </div>
-  </mat-expansion-panel>
-</mat-accordion>
 
-<div contCentrado>
-  <button mat-raised-button  color="accent" (click)="consultar()">Consultar/Actualizar base de datos</button>
-</div>
-<div contCentrado>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      Listado 
-    </mat-expansion-panel-header>
-  
-    <div contCentrado>
-      <div *ngIf="infoArr.length > 0 else consulta">
-        <mat-card>Lista de usuarios</mat-card>
-        <div *ngFor="let datos of infoArr; let i = index ">
-          <ul>
-            <li>
-              {{ i + 1 }}{{ datos | json }}
-              <div style="display: 1 1;"></div>
-              <button mat-stroked-button color="warn" (click)="eliminar( datos.id, i )">Eliminar</button>
-              <button mat-stroked-button color="basic" (click)="editar( datos.id, i )">Editar</button>
-              <mat-divider></mat-divider>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <ng-template #consulta>
-        <mat-card><mat-error>No hay elementos</mat-error></mat-card>
-      </ng-template>
-      <!-- <app-consulta-db [infoDb]="infoArr"></app-consulta-db> -->
-    </div>
+  <mat-divider></mat-divider>
 
-
-  </mat-expansion-panel>
-</div>
-
-</mat-drawer-container>
 

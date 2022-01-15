@@ -2,5 +2,15 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.container {
+    width: 600px;
+    height: 500px;
+}
+.e{
+    flex: 1 1;
+}
+.espacio{
+    margin-right: 10px;
+}
 
 

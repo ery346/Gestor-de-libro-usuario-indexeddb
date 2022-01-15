@@ -1,58 +1,72 @@
-<mat-expansion-panel >
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Buscar usuario
-        </mat-panel-title>
-        <mat-panel-description>
-          edita y elimina el usuario
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      
-            <div contCentrado>
-          <h1>Buscar Usuario</h1>
-        </div>
-        <div contCentrado>
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Id</mat-label>
-            <input matInput (keydown.enter)="buscar()"  [(ngModel)]="valor" #busca>
-          </mat-form-field>
-        </div>
-        <div *ngIf="actualizarDatos" >
-          <div contCentrado *ngIf="busqueda === undefined else res">
-            <mat-error>El id es incorrecto o no se encontro el usuario</mat-error>
-          </div>
-          <ng-template #res>
-            <div contCentrado >
-              <ul>
-                <div>
-                  <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>ID:</mat-label>
-                    <input matInput disabled id="color-id"  [value]="actualizarDatos">
-                  </mat-form-field>
-                </div>
-                <form class="example-form" [formGroup]="formulario">
-                  <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Nombre</mat-label>
-                    <input matInput formControlName="nombre">
-                  </mat-form-field>
-                
-                  <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Edad</mat-label>
-                      <input matInput type="number" formControlName="edad" >
-                    </mat-form-field>
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Telefono</mat-label>
-                      <input matInput type="number" formControlName="telefono">
-                    </mat-form-field>
-                </form>
-                <button mat-stroked-button color="basic" (click)="update()">Actualizar</button>
-              </ul>
-              <ul>
-              <button mat-stroked-button color="warn" (click)="borrar( busqueda.id )">Eliminar</button>
-              </ul>
-            
-            </div>
-          </ng-template>
-        </div>
+<div contCentrado>
+  <h2>ID Usuario</h2>
+</div>
+<div contCentrado>
+  <mat-form-field class="example-full-width" appearance="outline">
+    <mat-label>Id</mat-label>
+    <input matInput (keydown.enter)="buscar()"  [(ngModel)]="valor" #busca>
+  </mat-form-field>
+</div>
 
-    </mat-expansion-panel>
+<div contCentrado *ngIf="busqueda === undefined else res">
+  <mat-error>El id es incorrecto o no se encontro el usuario</mat-error>
+</div>
+<ng-template #res>
+  <div contCentrado> 
+   <table border="1"  height="100" [width]="500">
+    <tr bgColor="#008B8B">
+      <th>Id</th>
+      <th>Nombre</th>
+      <th>Edad</th>
+      <th>Telefono</th>
+    </tr>
+    <tr bgColor="	#778899">
+      <td >{{ busqueda.id }}</td>
+      <td >{{ busqueda.nombre }}</td>
+      <td>{{ busqueda.edad }}</td>
+      <td>{{ busqueda.telefono }}</td>
+    </tr>
+  </table>                      
+  </div>
+   <p></p>
+  <div contCentrado>
+    <!-- <mat-card >
+      Prestamos   
+    </mat-card> -->
+    <table border="3" [width]="160">
+      <tr bgColor="#008B8B"><th>Prestamos</th> </tr>
+    </table>
+    <table border="3">
+      <tr bgColor="	#778899">
+        <div *ngIf="libros.length > 0 || arrLibros.length > 0  else noLibros">
+          <div *ngFor="let ids of libros; let i =index ">
+            <ul>
+              <ol>
+                {{i + 1}} - {{ ids }} 
+                <button mat-button color="accent" (click)="devolverLibro(ids, i)">Devolver libro</button>
+              </ol>
+            </ul>
+          </div>
+        </div>
+        <ng-template #noLibros> <mat-error>0 libros</mat-error></ng-template>
+        <div *ngFor="let l of arrLibros">  
+          <ul>
+            <li>
+              {{ l }} <u>Nuevo </u>  
+            </li>
+          </ul>
+          
+        </div>
+      </tr>
+    </table>
+    
+    <mat-divider></mat-divider>          
+  </div>
+  <p></p>
+  <mat-divider></mat-divider>
+  <div>
+    <app-buscar-l (p)="recibirId($event)"></app-buscar-l>
+  </div>
+</ng-template>
+
+        

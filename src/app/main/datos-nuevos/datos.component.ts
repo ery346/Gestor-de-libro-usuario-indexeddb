@@ -1,7 +1,7 @@
-import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { usuarioModel } from 'src/app/shared/interface/datos.interface';
+import { librosModel, usuarioModel } from 'src/app/shared/interface/datos.interface';
 import { DbService } from 'src/app/shared/services/db.service';
 
 @Component({
@@ -17,7 +17,7 @@ import { DbService } from 'src/app/shared/services/db.service';
       color: #1e7df0;
     }
     mat-expansion-panel{
-      width: 682px;
+      width: 800px;
       margin-top: 10px;
       margin-bottom: 10px;
     }
@@ -27,23 +27,29 @@ import { DbService } from 'src/app/shared/services/db.service';
 export class DatosComponent implements OnInit {
   c: boolean = false;
   actualizarDatos: string = '';
-  infoArr: usuarioModel[] = [];
+  usuariosArr: usuarioModel[] = [];
+  librosArr: librosModel[] = [];
   desabilitarBA: boolean = true;
   desabilitarB!: boolean;
   desabilitarPanel!: boolean;
   mostrarId!: string;
   titulo: string = 'Agregar';
-  get consultarDb (){
-    return this.dbS.consultaDb;
+  formulario: FormGroup = this.fb.group({
+    nombre: ['', Validators.required],
+    edad: ['', Validators.required],
+    telefono: ['', Validators.required],
+    libros: [[]]
+  });
+
+  get consultarU (){
+    return this.dbS.consultaU;
+  }
+  get consultarL(){
+    return this.dbS.consultaL;
   }
   get leerD (){
     return this.dbS.leerDato;
   }
-  formulario: FormGroup = this.fb.group({
-    nombre: ['', Validators.required],
-    edad: ['', Validators.required],
-    telefono: ['', Validators.required]
-  });
   constructor( private dbS: DbService, private fb: FormBuilder, private _snackBar: MatSnackBar){}
  
   ngOnInit(): void {
@@ -61,8 +67,9 @@ export class DatosComponent implements OnInit {
   }
   agregar(){
     if(this.formulario.valid){
-      this.formulario.value.id = 'usuario_' + Date.now();
-      this.dbS.agregar(this.formulario.value);
+      this.formulario.value.libros = []
+      this.formulario.value.id = 'u_' + Date.now();
+      this.dbS.agregarU(this.formulario.value);
       this.mostrarId = this.formulario.value.id;
       this.mensageAgregado();
       this.formulario.reset();
@@ -70,31 +77,12 @@ export class DatosComponent implements OnInit {
       this.formulario.markAllAsTouched();
     }
   }
-  editar(id: number, index: number){
-    // console.log(id)
-    this.desabilitarBA = false;
-    this.desabilitarB = true;
-    this.titulo = 'Editar';
-    this.dbS.leerr(id);
-    this.leerD.onsuccess = (e: any) => {
-      const usuario = this.leerD.result;
-          this.formulario.reset({
-          nombre: usuario.nombre,
-          edad: usuario.edad,
-          telefono: usuario.telefono
-          });
-          this.actualizarDatos = usuario.id
-    }
- 
-    this.desabilitarPanel = true;
-    this.infoArr.splice(index , 1)
-  }
 
   actualizar(){
     this.formulario.value.id = this.actualizarDatos
     // console.log(this.formulario.value)
-    this.dbS.actualizar(this.formulario.value);
-    this.infoArr = [...this.infoArr, this.formulario.value ];
+    this.dbS.actualizarU(this.formulario.value);
+    this.usuariosArr = [...this.usuariosArr, this.formulario.value ];
     this.formulario.reset();
     this.actualizarDatos = '';
     this.desabilitarBA = true;
@@ -104,26 +92,41 @@ export class DatosComponent implements OnInit {
     this.titulo = 'Agregar';
   }
 
-  eliminar(id: number, index: number){
-    this.dbS.eliminar( id );
-    this.infoArr.splice(index , 1)
-    // console.log(this.infoArr, index)
+  eliminarU(id: number , index: number){
+    this.dbS.eliminarU( id );
+    this.usuariosArr.splice(index , 1)
     this.mensageEliminado();
   }
 
-  consultar(){
-    this.infoArr = []
-    this.dbS.consultarDb();
-    this.consultarDb.onsuccess = (e: any) =>{
-        const d  =  e.target.result;  
-        // console.log(this.infoArr)
-        if(d){
-          this.infoArr = [...this.infoArr, d.value];
-            // console.log(d.value);
-            d.continue()
-        }
-    }
+  eliminarL( id: number, index: number){
+    this.dbS.eliminarL( id );
+    this.librosArr.splice(index, 1);
+    this.mensageEliminado();
   }
+  // consultar(){
+  //   this.usuariosArr = [];
+  //   this.librosArr = [];
+  //   this.dbS.consultarDb();
+  //   this.consultarU.onsuccess = (e: any) =>{
+  //       const valores  =  e.target.result;  
+  //       // console.log(this.infoArr)
+  //       if(valores){
+  //         this.usuariosArr = [...this.usuariosArr, valores.value];
+  //           // console.log(d.value);
+  //           valores.continue()
+  //       }
+  //   }
+
+  //   this.consultarL.onsuccess = (e: any) => {
+  //     const valores = e.target.result;
+
+  //     if(valores){
+      
+  //       this.librosArr = [...this.librosArr, valores.value]
+  //     valores.continue()
+  //     }
+  //   }
+  // }
 
   mensageAgregado() {
     this._snackBar.open('Nuevo usuario agregado!!!', 'db', {

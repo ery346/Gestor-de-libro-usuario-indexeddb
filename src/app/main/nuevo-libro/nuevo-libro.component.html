@@ -1,0 +1,38 @@
+
+    <div contCentrado><h1>Agregar libro</h1></div>
+    <div contCentrado>
+      <span *ngIf="mostrarId" >
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Nuevo ID:</mat-label>
+          <input matInput disabled id="color-id" (click)="mostrarId = ''" [value]="mostrarId">
+        </mat-form-field>
+        <button mat-mini-fab color="warn" (click)="borrarNuevoId()">X</button>
+      </span>
+      
+      <form [formGroup]="formulario">
+          <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Titulo</mat-label>
+              <input matInput formControlName="titulo">
+            </mat-form-field>
+  
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Autor</mat-label>
+              <input matInput formControlName="autor">
+            </mat-form-field>
+  
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Fecha de entrada</mat-label>
+              <input matInput formControlName="fechaEntrada" type="date">
+            </mat-form-field>
+  
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Editorial</mat-label>
+              <input matInput formControlName="editorial">
+            </mat-form-field>
+      </form>  
+    </div>
+    <div contCentrado> <mat-error *ngIf="error"> {{ error }}</mat-error></div>
+    <div contCentrado>
+      <button mat-raised-button color="primary" (click)="agregarLibro()">Agregar</button>
+    </div>
+    

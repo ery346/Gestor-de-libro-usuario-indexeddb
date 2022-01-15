@@ -1,0 +1,76 @@
+<div contCentrado>
+    <button mat-raised-button  color="accent" (click)="consultar()">Actualizar/ver listas</button>
+</div>
+    <h3>Usuarios disponibles en base de datos</h3>
+<div contCentrado>
+    <div *ngIf="usuariosArr.length > 0 else mensage">
+        <div *ngFor="let datos of usuariosArr; let i = index ">
+          <ul>
+            <li>
+              <table border="1" height="20px" >
+                  {{i + 1}}
+                  <tr bgColor="#008B8B">
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Telefono</th>
+                    <th>Libros</th>
+                  </tr>
+                  <tr bgColor="gray">
+                    <td >{{ datos.id }}</td>
+                    <td >{{ datos.nombre }}</td>
+                    <td>{{ datos.edad }}</td>
+                    <td>{{ datos.telefono }}</td>
+                    <td>
+                      <tr *ngFor="let l of datos.libros"  bgColor="gray">
+      
+                        <ul>{{ l }}</ul>
+                
+                      </tr>
+                    </td>
+                  </tr>
+              </table> 
+            </li>
+          </ul>
+        </div>
+      </div>
+        <ng-template #mensage>
+        <mat-card><mat-error>No hay elementos</mat-error></mat-card>
+      </ng-template>          
+</div>
+     <mat-divider></mat-divider>
+     <h3>Libros disponibles en base de datos</h3>
+
+<div contCentrado>
+    <div *ngIf="librosArr.length > 0 else mensage2">
+        <div *ngFor="let datos of librosArr; let i = index ">
+          <ul>
+            <li>
+              {{ i + 1 }}
+              <table border="1"  height="20px" >
+                  <tr bgColor="#48D1CC">
+                    <th>Id</th>
+                    <th>Titulo</th>
+                    <th>Autor</th>
+                    <th>Fecha de entrada</th>
+                    <th>Editorial</th>
+                    <th>Estatus</th>
+                  </tr>
+                  <tr bgColor="#696969">
+                    <td >{{ datos.id }}</td>
+                    <td >{{ datos.titulo }}</td>
+                    <td>{{ datos.autor }}</td>
+                    <td>{{ datos.fechaEntrada }}</td>
+                    <td>{{ datos.editorial }}</td>
+                    <td>{{ datos.estatus }}</td>
+                  </tr>
+                </table>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <ng-template #mensage2>
+        <mat-card><mat-error>No hay elementos</mat-error></mat-card>
+      </ng-template>
+</div> 
+

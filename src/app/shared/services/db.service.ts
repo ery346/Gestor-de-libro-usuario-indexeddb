@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
-import { usuarioModel } from '../interface/datos.interface';
+import { usuarioModel, librosModel } from '../interface/datos.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbService {
   baseDeDatos!: IDBDatabase;
-  leerD: any;
-  consultaDb: any
+  leerD!: IDBRequest;
+  leerDL!: IDBRequest;
+  consultaUsuario!: IDBRequest<IDBCursorWithValue | null>;
+  consultaLibro!: IDBRequest<IDBCursorWithValue | null>;
   get leerDato(){
     return this.leerD;
   }
-
-  get consuta(){
-    return this.consultaDb;
+  get leerDatoL(){
+    return this.leerDL;
+  }
+  get consultaL(){
+    return this.consultaLibro;
+  }
+  get consultaU(){
+    return this.consultaUsuario;
   }
   constructor() { }
 
@@ -37,22 +44,37 @@ export class DbService {
     }
     }
 
-    agregar(info: usuarioModel){
+    agregarL(info: librosModel){
+      const transaccion = this.baseDeDatos.transaction(['libros'],'readwrite')
+      const coleccionObjetos = transaccion.objectStore('libros')
+      coleccionObjetos.add(info)
+      // console.log('Agregado', info)
+    }
+
+
+    agregarU(info: usuarioModel){
       const transaccion = this.baseDeDatos.transaction(['usuarios'],'readwrite')
       const coleccionObjetos = transaccion.objectStore('usuarios')
       coleccionObjetos.add(info)
       // console.log('Agregado', info)
     }
     
-    leerr( id: any){
+    leerU( id: number | string){
       const transaccion = this.baseDeDatos.transaction(['usuarios'],'readonly')
       const coleccionObjetos = transaccion.objectStore('usuarios')
       const conexion = coleccionObjetos.get(id)
 
      this.leerD = conexion;
     }
+    leerL( id: number | string){
+      const transaccion = this.baseDeDatos.transaction(['libros'],'readonly')
+      const coleccionObjetos = transaccion.objectStore('libros')
+      const conexion = coleccionObjetos.get(id)
 
-    actualizar(datos: usuarioModel){
+     this.leerDL = conexion;
+    }
+
+    actualizarU(datos: usuarioModel){
       const trasaccion = this.baseDeDatos.transaction(['usuarios'],'readwrite')
       const coleccionObjetos = trasaccion.objectStore('usuarios')
       const conexion = coleccionObjetos.put(datos)
@@ -61,8 +83,17 @@ export class DbService {
       //   console.log(conexion.results) 
       // }
     }
+    actualizarL(datos: librosModel){
+      const trasaccion = this.baseDeDatos.transaction(['libros'],'readwrite')
+      const coleccionObjetos = trasaccion.objectStore('libros')
+      const conexion = coleccionObjetos.put(datos)
+      
+      // conexion.onsuccess = () =>{
+      //   console.log(conexion.results) 
+      // }
+    }
 
-    eliminar(id: number){
+    eliminarU(id: number){
       const trasaccion = this.baseDeDatos.transaction(['usuarios'],'readwrite')
       const coleccionObjetos = trasaccion.objectStore('usuarios')
       const conexion = coleccionObjetos.delete(id)
@@ -72,11 +103,26 @@ export class DbService {
       // }
     }
 
+    eliminarL(id: number){
+      const trasaccion = this.baseDeDatos.transaction(['libros'],'readwrite')
+      const coleccionObjetos = trasaccion.objectStore('libros')
+      const conexion = coleccionObjetos.delete(id)
+  
+      // conexion.onsuccess = () =>{
+      //     this.consultar();
+      // }
+    }
     consultarDb(){
+      const t = this.baseDeDatos.transaction(['libros'],'readonly')
+      const coleccionO = t.objectStore('libros')
+      const c = coleccionO.openCursor();
       const transaccion = this.baseDeDatos.transaction(['usuarios'],'readonly')
       const coleccionObjetos = transaccion.objectStore('usuarios')
       const conexion = coleccionObjetos.openCursor();
 
-      this.consultaDb = conexion;
+      this.consultaLibro = c ;
+      this.consultaUsuario = conexion;
+
     }
+ 
 }

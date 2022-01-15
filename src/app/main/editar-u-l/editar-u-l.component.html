@@ -1,0 +1,46 @@
+<div contCentrado>Buscar Usuario</div>
+<div contCentrado>
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>Id</mat-label>
+      <input matInput (keydown.enter)="buscar()"  [(ngModel)]="limpiarInput" #busca>
+    </mat-form-field>
+</div>
+<div contCentrado>
+    <mat-form-field class="example-full-width" appearance="standard">
+        <mat-label>ID:</mat-label>
+        <input matInput disabled  [value]="id">
+      </mat-form-field>
+     
+</div>
+<div contCentrado>
+    <form [formGroup]="formularioU">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Nombre</mat-label>
+          <input matInput formControlName="nombre">
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Edad</mat-label>
+            <input matInput type="number" formControlName="edad" >
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Telefono</mat-label>
+            <input matInput type="number" formControlName="telefono">
+          </mat-form-field>
+          
+      </form>
+      <button mat-stroked-button color="accent">Editar</button>
+      <button mat-stroked-button color="warn">Dar de baja</button>
+</div>
+<div style="margin-left: 200px;">
+    Libros
+    <div *ngFor="let l of libros" >
+        <ul>
+            <ol>
+                {{l}}
+            </ol>
+        </ul>
+    </div>
+</div>
+
+    
+

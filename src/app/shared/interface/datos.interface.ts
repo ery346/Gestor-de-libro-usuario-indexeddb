@@ -1,15 +1,17 @@
 export interface usuarioModel {
-    id:        number;
+    id:        number ;
     nombre:    string;
     edad:      number;
     telefono:  number;
-    // libro:     libros;
+    libros:    string[];
 }
 
-// interface libros {
-//     id: number;
-//     titulo: string
-//     autor: string;
-//     fechaDeEntrada: number;
-//     editorial: string;
-// }
+
+export interface librosModel {
+    id: number ;
+    titulo: string
+    autor: string;
+    fechaEntrada: number;
+    editorial: string;
+    estatus: boolean;
+}
