@@ -29,10 +29,8 @@ export class ConsultarComponent implements OnInit {
      this.dbS.consultarDb();
     this.consultarU.onsuccess = (e: any) =>{
         const valores  =  e.target.result;  
-        // console.log(this.infoArr)
         if(valores){
           this.usuariosArr = [...this.usuariosArr, valores.value];
-            // console.log(d.value);
             valores.continue()
         }
     }

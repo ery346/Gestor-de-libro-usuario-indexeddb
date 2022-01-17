@@ -1,0 +1,83 @@
+<div contCentrado>Buscar Libro</div>
+<div contCentrado>
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>Id</mat-label>
+      <input matInput (keydown.enter)="buscarLibro()"   [(ngModel)]="limpiarInputLibro" #busca2>
+    </mat-form-field>
+    <div style="margin-right: 10px;"></div>
+    <div>
+        <button (click)="escanear()">Escanear QR</button>
+        <h4 class="animate__animated animate__flash animate__infinite	animate__slow">{{escaneando}}</h4>
+      </div>
+</div>
+<div *ngIf="mostrarInfoL === undefined else msg2">
+    <div contCentrado>
+        <mat-error>Ingresa un id valido</mat-error>
+    </div>
+</div>
+
+<ng-template #msg2>
+   
+    <div contCentrado>
+        <mat-form-field class="example-full-width" appearance="standard">
+            <mat-label>ID:</mat-label>
+            <input matInput disabled  [value]="idLibro">
+          </mat-form-field>
+         
+    </div>
+    <div contCentrado>
+        <form [formGroup]="formularioL">
+            <table border="1">
+                <tr>
+                    <th>Titulo</th>
+                    <th>Autor</th>
+                    <th>FechaEntrada</th>
+                    <th>Editorial</th>
+                    <th>Estatus</th>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width" appearance="standard">
+                          <input matInput formControlName="titulo">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="example-full-width" appearance="standard">
+                            <input matInput formControlName="autor">
+                          </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="example-full-width" appearance="standard">
+                            <input matInput formControlName="fechaEntrada">
+                          </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="example-full-width" appearance="standard">
+                            <input matInput formControlName="editorial">
+                          </mat-form-field>
+                    </td>
+                    <td>
+                        {{estatusLibro}}
+                    </td>
+                </tr>
+            </table>
+          </form>
+    </div>
+    <p></p>
+    <div contCentrado>
+        <button mat-raised-button color="accent" (click)="editarLibro()">Actualizar</button>
+        <div style="margin-right: 100px;"></div>
+        <button mat-stroked-button [disabled]="botonEliminar" color="warn" (click)="eliminarLibro()">Dar de baja</button>
+        <div *ngIf="botonEliminar"><small>(para eliminar el libro, este debe estar disponible)</small></div>
+    </div>
+</ng-template>
+
+<div hidden>
+    <qr-scanner
+    [debug]="false"
+    [canvasWidth]="1000"                               
+    [canvasHeight]="500"                               
+    [stopAfterScan]="escaner" 
+    [updateTime]="1000">          
+  </qr-scanner>
+</div>

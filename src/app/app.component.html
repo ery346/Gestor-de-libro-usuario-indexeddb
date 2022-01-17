@@ -1,12 +1,11 @@
 <mat-drawer-container fullscreen>
     <mat-toolbar color="primary">
         <span class="e">Indexeddb</span>
-
-        <span class="espacio"><a mat-button color="accent" routerLink="/estatus">Estatus de usuario </a></span>
-        <span class="espacio"><a mat-button color="accent" routerLink="/nuevo-libro">Nuevo libro </a></span>
-        <span class="espacio"><a mat-button color="accent" routerLink="/nuevo-usuario">Nuevo usuario </a></span>
-        <span class="espacio"><a mat-button color="accent" routerLink="/editar">Editar/Eliminar</a></span>
-        <span class="espacio"><a mat-button color="accent" routerLink="/consultar">Consultar Db </a></span>
+        <span class="espacio"><a mat-button color="accent" routerLinkActive="link-activo" routerLink="/prestamos-devoluciones"><small>Prestamos/Devoluciones </small></a></span>
+        <span class="espacio"><a mat-button color="accent" routerLinkActive="link-activo" routerLink="/nuevo-libro"><small>Nuevo libro </small></a></span>
+        <span class="espacio"><a mat-button color="accent" routerLinkActive="link-activo" routerLink="/nuevo-usuario"><small>Nuevo usuario </small></a></span>
+        <span class="espacio"><a mat-button color="accent" routerLinkActive="link-activo" routerLink="/editar"> <small>Editar/Eliminar</small></a></span>
+        <span class="espacio"><a mat-button color="accent" routerLinkActive="link-activo" routerLink="/consultar"><small>Consultar Db</small></a></span>
     </mat-toolbar>
 
     <router-outlet></router-outlet>

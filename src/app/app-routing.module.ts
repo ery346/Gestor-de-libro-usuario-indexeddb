@@ -5,18 +5,19 @@ import { NuevoLibroComponent } from './main/nuevo-libro/nuevo-libro.component';
 import { DatosComponent } from './main/datos-nuevos/datos.component';
 import { EditarULComponent } from './main/editar-u-l/editar-u-l.component';
 import { ConsultarComponent } from './main/consultar/consultar.component';
+import { PantallaInicioComponent } from './main/pantalla-inicio/pantalla-inicio.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: BuscarUComponent
+    component: PantallaInicioComponent
   },
   {
     path: 'nuevo-libro',
     component: NuevoLibroComponent
   },
   {
-    path: 'estatus',
+    path: 'prestamos-devoluciones',
     component: BuscarUComponent
   },
   {

@@ -7,12 +7,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-nuevo-libro',
   templateUrl: './nuevo-libro.component.html',
   styles: [
-    `
-     mat-expansion-panel{
-      width: 800px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }`
   ]
 })
 export class NuevoLibroComponent implements OnInit {
@@ -38,7 +32,7 @@ export class NuevoLibroComponent implements OnInit {
      this.dbS.agregarL(this.formulario.value);
      this.mostrarId = this.formulario.value.id;
      this.formulario.reset();
-     this.mensageAgregado();
+     this.mensajeAgregado();
     }
     else{
       this.error = 'Error!!!';
@@ -48,7 +42,7 @@ export class NuevoLibroComponent implements OnInit {
   borrarNuevoId(){
     this.mostrarId = '';
   }
-  mensageAgregado() {
+  mensajeAgregado() {
     this._snackBar.open('Nuevo libro agregado!!!', 'db', {
       duration: 3000,
     });

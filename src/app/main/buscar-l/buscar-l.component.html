@@ -6,6 +6,11 @@
           <mat-label>Id</mat-label>
           <input matInput (keydown.enter)="buscar()"  [(ngModel)]="valor" #busca>
         </mat-form-field>
+        <div style="margin-right: 10px;"></div>
+        <div>
+          <button (click)="escanear()">Escanear QR</button>
+          <h4 class="animate__animated animate__flash animate__infinite	animate__slow">{{escaneando}}</h4>
+        </div>
       </div>
      
         <div contCentrado *ngIf="busqueda === undefined else res">
@@ -13,7 +18,6 @@
         </div>
         <ng-template #res>
           <div *ngIf="mostrar === 'm'"> 
-           
               <div contCentrado> 
                 <table border="1"  height="100px" [width]="600">
                   <tr bgColor="#B0C4DE">
@@ -46,12 +50,16 @@
                   </tr>
                 </table>
               </div>
-              <ul>
-                <!-- <button mat-stroked-button color="warn" [disabled]="!busqueda.estatus" (click)="eliminar()">Dar de baja</button> -->
-              </ul>
-            
             </div>
          
         </ng-template>
   
-
+        <div hidden>
+          <qr-scanner
+          [debug]="false"
+          [canvasWidth]="1000"                               
+          [canvasHeight]="500"                               
+          [stopAfterScan]="escaner" 
+          [updateTime]="1000">          
+        </qr-scanner>
+    </div>

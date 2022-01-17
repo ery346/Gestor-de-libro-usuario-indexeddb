@@ -5,11 +5,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCardModule} from '@angular/material/card';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatExpansionModule} from '@angular/material/expansion';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatGridListModule} from '@angular/material/grid-list';
 import {MatIconModule} from '@angular/material/icon';
-
+import {MatSelectModule} from '@angular/material/select';
 
 import { ContenidoCentradoDirective } from './directivas/contenido-centrado.directive';
 
@@ -26,10 +24,9 @@ import { ContenidoCentradoDirective } from './directivas/contenido-centrado.dire
     MatDividerModule,
     MatCardModule,
     MatSnackBarModule,
-    MatExpansionModule,
     MatToolbarModule,
-    MatGridListModule,
     MatIconModule,
+    MatSelectModule,
     ContenidoCentradoDirective
   ]
 })

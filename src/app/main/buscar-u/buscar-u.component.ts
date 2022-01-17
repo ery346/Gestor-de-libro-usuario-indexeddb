@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {QrScannerComponent} from 'angular2-qrscanner';
 import { usuarioModel } from 'src/app/shared/interface/datos.interface';
 import { DbService } from '../../shared/services/db.service';
 import { librosModel } from '../../shared/interface/datos.interface';
@@ -8,30 +9,28 @@ import { librosModel } from '../../shared/interface/datos.interface';
 @Component({
   selector: 'app-buscar-u',
   templateUrl: './buscar-u.component.html',
-  styles: [`
-  mat-expansion-panel{
-      width: 800px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-  `
-  ]
+  styles: [
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class BuscarUComponent implements OnInit {
   actualizarDatos: string = '';
   valor: string = '';
   busqueda!: usuarioModel;
-  libros!: any[];
+  libros!: string[];
   objLibro!: librosModel;
   arrLibros: string[] = [];
   arrConcatenados!: string[];
+  escaner!: boolean ;
+  escaneando: string = '';
   get leerDu (){
     return this.dbS.leerDato;
   }
   get leerDl (){
     return this.dbS.leerDatoL;
   }
-  @ViewChild('busca') buscarU!: ElementRef<HTMLInputElement>
+  @ViewChild('busca') buscarU!: ElementRef<HTMLInputElement> 
+  @ViewChild(QrScannerComponent, { static: false}) qrScannerComponent!: QrScannerComponent ;
   formulario: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
     edad: ['', Validators.required],
@@ -43,26 +42,55 @@ export class BuscarUComponent implements OnInit {
     this.dbS.db();
   }
 
-  mensageEliminado() {
-    this._snackBar.open('Se elimino el usuario!!!', 'db', {
-      duration: 3000,
-    });
+  escanear(){
+    this.qrScannerComponent.getMediaDevices().then(devices => {
+      
+      this.escaneando = 'Escaneando...';
+      const videoDevices: MediaDeviceInfo[] = [];
+      for (const device of devices) {
+          if (device.kind.toString() === 'videoinput') {
+              videoDevices.push(device);
+          }
+      }
+      if (videoDevices.length > 0){
+          let choosenDev;
+          for (const dev of videoDevices){
+              if (dev.label.includes('front')){
+                  choosenDev = dev;
+                  break;
+              }
+          }
+          if (choosenDev) {
+              this.qrScannerComponent.chooseCamera.next(choosenDev);
+          } else {
+              this.qrScannerComponent.chooseCamera.next(videoDevices[0]);
+          }
+      }
+  });
+
+  this.qrScannerComponent.capturedQr.subscribe(result => {
+    this.valor = result;
+    this.buscar();
+    
+      console.log(this.valor);
+  });
   }
 
-  mensageActualizado(){
+  mensajeActualizado(){
     this._snackBar.open('Usuario y libro actualizado!!!', 'db', {
       duration: 3000,
     });
   }
 
   buscar(){
+    this.arrLibros = [];
     const valor = this.buscarU.nativeElement.value.trim();
-    console.log(valor)
-    this.dbS.leerU(valor);
-
+    this.dbS.leerU(valor || this.valor);
+   
     this.leerDu.onsuccess = (e: Event) =>{
       const u = this.leerDu.result;
-      console.log(u);
+      this.escaner = true;
+      this.escaneando = '';
       this.busqueda = u;
       this.libros = u.libros;
       this.formulario.reset({
@@ -73,6 +101,7 @@ export class BuscarUComponent implements OnInit {
         this.actualizarDatos = u.id
     }
   
+    this.qrScannerComponent.stopScanning();
     this.valor = '';
   }
 
@@ -82,11 +111,10 @@ export class BuscarUComponent implements OnInit {
    this.formulario.value.libros = u;
    console.log(this.formulario.value)
    this.dbS.actualizarU(this.formulario.value);
-  this.mensageActualizado()
+  this.mensajeActualizado()
   }
 
   devolverLibro(id: string, indice: number){
-    console.log(id, indice)
     this.libros.splice(indice, 1);
     this.dbS.leerL(id);
     this.leerDl.onsuccess = (e: Event) => {
@@ -99,14 +127,10 @@ export class BuscarUComponent implements OnInit {
     this.update();
   }
 
-
-
   recibirId(mensage: string){
-
     if (mensage) {
       this.arrLibros = [... this.arrLibros, mensage];
       this.update();
     }
-    console.log(this.arrLibros)
   }
 }

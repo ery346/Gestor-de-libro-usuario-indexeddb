@@ -6,10 +6,14 @@
     <mat-label>Id</mat-label>
     <input matInput (keydown.enter)="buscar()"  [(ngModel)]="valor" #busca>
   </mat-form-field>
+  <div style="margin-right: 10px;"></div>
+  <div>
+    <button (click)="escanear()">Escanear QR</button>
+    <h4 class="animate__animated animate__flash animate__infinite	animate__slow">{{escaneando}}</h4>
+  </div>
 </div>
-
 <div contCentrado *ngIf="busqueda === undefined else res">
-  <mat-error>El id es incorrecto o no se encontro el usuario</mat-error>
+  <mat-error>Ingresa un id valido</mat-error>
 </div>
 <ng-template #res>
   <div contCentrado> 
@@ -30,15 +34,13 @@
   </div>
    <p></p>
   <div contCentrado>
-    <!-- <mat-card >
-      Prestamos   
-    </mat-card> -->
+
     <table border="3" [width]="160">
       <tr bgColor="#008B8B"><th>Prestamos</th> </tr>
     </table>
     <table border="3">
       <tr bgColor="	#778899">
-        <div *ngIf="libros.length > 0 || arrLibros.length > 0  else noLibros">
+        <div *ngIf="libros.length >= 0  else noLibros">
           <div *ngFor="let ids of libros; let i =index ">
             <ul>
               <ol>
@@ -48,7 +50,7 @@
             </ul>
           </div>
         </div>
-        <ng-template #noLibros> <mat-error>0 libros</mat-error></ng-template>
+        <ng-template #noLibros> <div style="background-color: cornflowerblue;"> 0 libros</div></ng-template>
         <div *ngFor="let l of arrLibros">  
           <ul>
             <li>
@@ -58,9 +60,7 @@
           
         </div>
       </tr>
-    </table>
-    
-    <mat-divider></mat-divider>          
+    </table>      
   </div>
   <p></p>
   <mat-divider></mat-divider>
@@ -69,4 +69,12 @@
   </div>
 </ng-template>
 
-        
+<div hidden>
+      <qr-scanner
+      [debug]="false"
+      [canvasWidth]="1000"                               
+      [canvasHeight]="500"                               
+      [stopAfterScan]="escaner" 
+      [updateTime]="1000">          
+    </qr-scanner>
+</div>

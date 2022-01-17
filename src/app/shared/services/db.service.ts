@@ -93,7 +93,7 @@ export class DbService {
       // }
     }
 
-    eliminarU(id: number){
+    eliminarU(id: number | string){
       const trasaccion = this.baseDeDatos.transaction(['usuarios'],'readwrite')
       const coleccionObjetos = trasaccion.objectStore('usuarios')
       const conexion = coleccionObjetos.delete(id)
@@ -103,7 +103,7 @@ export class DbService {
       // }
     }
 
-    eliminarL(id: number){
+    eliminarL(id: number | string){
       const trasaccion = this.baseDeDatos.transaction(['libros'],'readwrite')
       const coleccionObjetos = trasaccion.objectStore('libros')
       const conexion = coleccionObjetos.delete(id)

@@ -1,45 +1,111 @@
-<div contCentrado>Buscar Usuario</div>
+<div contCentrado><h1>Editar o Eliminar la Informacion</h1></div>
 <div contCentrado>
-    <mat-form-field class="example-full-width" appearance="outline">
-      <mat-label>Id</mat-label>
-      <input matInput (keydown.enter)="buscar()"  [(ngModel)]="limpiarInput" #busca>
+    <mat-form-field appearance="standard">
+        <mat-label>Selecciona una opcion</mat-label>
+        <mat-select [(value)]="seleccion">
+          <mat-option>None</mat-option>
+          <mat-option value="usuario">
+              Usuario
+          </mat-option>
+          <mat-option value="libro">
+              Libro
+          </mat-option>
+    
+        </mat-select>
     </mat-form-field>
 </div>
-<div contCentrado>
-    <mat-form-field class="example-full-width" appearance="standard">
-        <mat-label>ID:</mat-label>
-        <input matInput disabled  [value]="id">
-      </mat-form-field>
-     
-</div>
-<div contCentrado>
-    <form [formGroup]="formularioU">
+<p></p>
+<div *ngIf="seleccion === 'usuario'"> 
+
+    <div contCentrado>Buscar Usuario</div>
+    <div contCentrado>
         <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Nombre</mat-label>
-          <input matInput formControlName="nombre">
+          <mat-label>Id</mat-label>
+          <input matInput (keydown.enter)="buscarUsuario()"  [(ngModel)]="limpiarInputUsuario" #busca>
         </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Edad</mat-label>
-            <input matInput type="number" formControlName="edad" >
-          </mat-form-field>
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Telefono</mat-label>
-            <input matInput type="number" formControlName="telefono">
-          </mat-form-field>
-          
-      </form>
-      <button mat-stroked-button color="accent">Editar</button>
-      <button mat-stroked-button color="warn">Dar de baja</button>
-</div>
-<div style="margin-left: 200px;">
-    Libros
-    <div *ngFor="let l of libros" >
-        <ul>
-            <ol>
-                {{l}}
-            </ol>
-        </ul>
+        <div style="margin-right: 10px;"></div>
+        <div>
+            <button (click)="escanear()">Escanear QR</button>
+            <h4 class="animate__animated animate__flash animate__infinite	animate__slow">{{escaneando}}</h4>
+          </div>
     </div>
+    <div *ngIf="mostrarInfoU === undefined else msg">
+        <div contCentrado>
+            <mat-error>Ingresa un id valido</mat-error>
+        </div>
+    </div>
+    <ng-template #msg>
+        <div contCentrado>
+            <mat-form-field class="example-full-width" appearance="standard">
+                <mat-label>ID:</mat-label>
+                <input matInput disabled  [value]="idUsuario">
+              </mat-form-field>
+             
+        </div>
+        <div contCentrado>
+            <form [formGroup]="formularioU">
+                <table border="1">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Edad</th>
+                        <th>Telefono</th>
+                        <th>Libros</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width" appearance="standard">
+                              <input matInput formControlName="nombre">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width" appearance="standard">
+                                <input matInput type="number" formControlName="edad" >
+                              </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width" appearance="standard">
+                                <input matInput type="number" formControlName="telefono">
+                              </mat-form-field>
+                        </td>
+                        <td>
+                            <tr>
+                                <div *ngFor="let l of librosU" >
+                                    <ul>
+                                        <ol>
+                                            {{l}}
+                                        </ol>
+                                    </ul>
+                                </div>
+                            </tr>
+                        </td>
+                    </tr>
+                </table>
+              </form>
+        </div>
+        <div contCentrado>
+            <button mat-raised-button color="accent" (click)="editarUsuario()">Actualizar</button>
+            <button mat-stroked-button [disabled]="botonEliminar" color="warn" (click)="eliminarUsuario()">Dar de baja</button>
+            <div *ngIf="botonEliminar"><small>(los libros deben ser devueltos para eliminar el usuario)</small></div>
+        </div>
+    </ng-template>
+</div>
+
+
+<!-- ....................................................................................................................................................... -->
+<!-- ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, -->
+
+<div *ngIf="seleccion === 'libro'">
+  <app-editar-l></app-editar-l>
+</div>
+
+<div hidden>
+    <qr-scanner
+    [debug]="false"
+    [canvasWidth]="1000"                               
+    [canvasHeight]="500"                               
+    [stopAfterScan]="escaner" 
+    [updateTime]="1000">          
+  </qr-scanner>
 </div>
 
     
